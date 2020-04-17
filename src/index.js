@@ -9,6 +9,9 @@ app.use('/upload', require('./routes/upload'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
+require('./mongoose')
+
+app.use('/persons', require('./routes/person'))
 app.use('/session', require('./routes/session'))
 app.use('/cookie', require('./routes/cookie'))
 app.use('/cookie-session', require('./routes/cookie-session'))

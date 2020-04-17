@@ -1,7 +1,9 @@
 const router = require('express').Router()
 const expressSession = require('express-session')
+const MongoStore = require('connect-mongo')(expressSession)
 
 const app = require('../express')
+const mongoose = require('../mongoose')
 
 app.use(
 	expressSession({
@@ -9,6 +11,13 @@ app.use(
 		secret: 'SECRET_KEY',
 		resave: false,
 		saveUninitialized: false,
+		cookie: {
+			maxAge: 1000 * 60,
+		},
+		store: new MongoStore({
+			mongooseConnection: mongoose.connection,
+		}),
+		unset: 'destroy',
 	})
 )
 
