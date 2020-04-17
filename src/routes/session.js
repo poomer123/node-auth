@@ -16,6 +16,8 @@ app.use(
 		},
 		store: new MongoStore({
 			mongooseConnection: mongoose.connection,
+			autoRemove: 'interval',
+			autoRemoveInterval: 1 * 60 * 24 * 30,
 		}),
 		unset: 'destroy',
 	})
