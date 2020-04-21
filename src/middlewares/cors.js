@@ -1,6 +1,12 @@
+const allowCors = ['http://localhost:8080', 'http://localhost:8081']
+
 module.exports = function cors(req, res, next) {
-	res.set({
-		'Access-Control-Allow-Origin': 'http://localhost:8080',
-	})
+	const { origin } = req.headers
+	if (origin && allowCors.includes(origin)) {
+		res.set({
+			'Access-Control-Allow-Origin': origin,
+		})
+	}
+
 	next()
 }
