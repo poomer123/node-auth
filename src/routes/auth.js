@@ -1,38 +1,41 @@
 const router = require('express').Router()
-const bcrypt = require('bcryptjs')
-const User = require('../models/user')
-const { signPayload } = require('../jwt')
+const cookieParser = require('cookie-parser')
+const {
+	signRefreshToken,
+	signAccessToken,
+	verifyRefreshToken,
+} = require('../jwt')
 
-router.post('/login', async (req, res) => {
+router.post('/login', (req, res) => {
 	const u = req.body
-	if (!u.username || !u.password) {
-		res.status(500)
-		res.end()
-		return
-	}
-
-	const user = await User.findOne({
+	const payload = {
 		username: u.username,
+		role: 'ADMIN',
+	}
+	const refreshToken = signRefreshToken(payload)
+	// should write to the database
+	const { accessToken, accessTokenExpiresAt } = signAccessToken(payload)
+	res.cookie('refresh_token', refreshToken, {
+		httpOnly: true,
+		// domain: 'example.com',
 	})
+	res.json({ accessToken, accessTokenExpiresAt })
+})
 
-	if (!user) {
-		res.status(401)
-		res.end()
-		return
+router.post('/auth/token', cookieParser(), (req, res) => {
+	console.log('req.cookies', req.cookies)
+	const refreshToken = req.cookies['refresh_token']
+	const { isError, payload } = verifyRefreshToken(refreshToken)
+	// should check from database
+	if (isError) {
+		res.status(401).end()
 	}
 
-	if (!bcrypt.compareSync(u.password, user.password)) {
-		res.status(401)
-		res.end()
-		return
-	}
-
-	const token = signPayload({
-		username: user.username,
-		role: 'admin',
+	const { accessToken, accessTokenExpiresAt } = signAccessToken({
+		username: payload.username,
 	})
-
-	res.json({ token })
+	res.json({ accessToken, accessTokenExpiresAt })
+	res.end()
 })
 
 module.exports = router
