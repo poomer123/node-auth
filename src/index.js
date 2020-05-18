@@ -7,9 +7,9 @@ app.use('/upload', require('./routes/upload'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-require('./mongoose');
+// require('./mongoose');
 
-app.use(require('./middlewares/cors'), require('./middlewares/prefilght'));
+// app.use(require('./middlewares/cors'), require('./middlewares/prefilght'));
 
 app.use(express.static(path.resolve('public')));
 
