@@ -1,11 +1,12 @@
-const mongoose = require('mongoose')
-const uri = 'mongodb://localhost:27017/auth_workshop'
+const mongoose = require('mongoose');
+const config = require('./config/index');
+const uri = config.DATABASE;
 
 const options = {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
-}
+};
 
-mongoose.connect(uri, options)
+mongoose.connect(uri, options);
 
-module.exports = mongoose
+module.exports = mongoose;
