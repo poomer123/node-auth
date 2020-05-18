@@ -1,6 +1,7 @@
 const express = require('express');
 const app = require('./express');
 const path = require('path');
+const config = require('./config/index');
 
 // app.use('/upload', require('./routes/upload'));
 
