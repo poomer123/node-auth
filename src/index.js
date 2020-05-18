@@ -14,11 +14,7 @@ app.use(express.json());
 
 app.use(express.static(path.resolve('public')));
 
-app.get('/healthcheck', () => {
-	res.json({
-		status: 'OK',
-	});
-});
+app.use('/healthcheck', require('./routes/healthcheck'));
 
 // app.use('/auth', require('./routes/auth'));
 // app.use('/number', require('./middlewares/jwt'), require('./routes/number'));
